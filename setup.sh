@@ -89,9 +89,9 @@ sudo -u vagrant mkdir -p "${WORKSPACE_PATH}"
 
 # Disable Welcome Page display
 sudo -u vagrant mkdir -p ${WORKSPACE_PATH}/.metadata/.plugins/org.eclipse.core.runtime/.settings
-sudo -u vagrant cat > ${WORKSPACE_PATH}/.metadata/.plugins/org.eclipse.core.runtime/.settings/com.crt.utils.prefs << EOF
+sudo -u vagrant tee ${WORKSPACE_PATH}/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.ui.prefs > /dev/null << 'EOF'
 eclipse.preferences.version=1
-showWelcomeView=false
+showIntro=false
 EOF
 
 #
@@ -111,7 +111,7 @@ SDK[EXT]=".tar.gz"
 SDK[MD5]="454a4976f44a34e5ce40375297ae72c8"
 
 SDK_FILE="${SDK[NAME]}${SDK[EXT]}"
-SDK_PATH="/opt/Freescale/${SDK}"
+SDK_PATH="/opt/Freescale/${SDK[NAME]}"
 
 if ! wget_robust "${SDK[URL]}/${SDK_FILE}" "${DATA_DIR}/${SDK_FILE}" "${SDK[MD5]}"; then
 	echo "Download failed" >&2
