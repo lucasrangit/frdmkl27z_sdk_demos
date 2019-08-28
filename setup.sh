@@ -125,8 +125,9 @@ sudo -u vagrant tar -xa --directory "${SDK_PATH}" -f "${DATA_DIR}/${SDK_FILE}"
 #
 # Import project
 #
-
-# FIXME -import/-importAll doesn't find the debug/launch configurations. you have to create a new debug configuration and set the machine name (e.g. MKL27Z64xxx4) manually.
-sudo -u vagrant /opt/Freescale/KDS_v3/eclipse/kinetis-design-studio -nosplash --launcher.suppressErrors -application org.eclipse.cdt.managedbuilder.core.headlessbuild -import "${PROJ_PATH}" -data "${WORKSPACE_PATH}"
+if [[ -e "${PROJ_PATH}/.cproject" ]]; then
+	# FIXME -import/-importAll doesn't find the debug/launch configurations. you have to create a new debug configuration and set the machine name (e.g. MKL27Z64xxx4) manually.
+	sudo -u vagrant /opt/Freescale/KDS_v3/eclipse/kinetis-design-studio -nosplash --launcher.suppressErrors -application org.eclipse.cdt.managedbuilder.core.headlessbuild -import "${PROJ_PATH}" -data "${WORKSPACE_PATH}"
+fi
 
 exit 0
