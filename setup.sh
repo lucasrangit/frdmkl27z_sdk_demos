@@ -98,15 +98,22 @@ EOF
 # Install SDK
 #
 
-SDK="SDK_2.1_MKL27Z256xxx4"
-#SDK="SDK_2.2.1_FRDM-KL27Z"
+declare -A SDK
 
-SDK_FILE="${SDK}.tar.gz"
-SDK_URL="https://community.nxp.com/servlet/JiveServlet/download/511082-1-453856/SDK_2.1_MKL27Z256xxx4.tar.gz"
-SDK_MD5="0d8eb1ed081d09ffbc91b012429f16b5"
+# SDK[NAME]="SDK_2.1_MKL27Z256xxx4"
+# SDK[URL]="https://community.nxp.com/servlet/JiveServlet/download/511082-1-453856/"
+# SDK[EXT]=".tar.gz"
+# SDK[MD5]="0d8eb1ed081d09ffbc91b012429f16b5"
+
+SDK[NAME]="SDK_2.2.1_FRDM-KL27Z"
+SDK[URL]="https://community.nxp.com/servlet/JiveServlet/download/511082-1-454235/"
+SDK[EXT]=".tar.gz"
+SDK[MD5]="454a4976f44a34e5ce40375297ae72c8"
+
+SDK_FILE="${SDK[NAME]}${SDK[EXT]}"
 SDK_PATH="/opt/Freescale/${SDK}"
 
-if ! wget_robust "${SDK_URL}" "${DATA_DIR}/${SDK_FILE}" "${SDK_MD5}" --user "${BITBUCKET_USER}" --password "${BITBUCKET_PASS}"; then
+if ! wget_robust "${SDK[URL]}/${SDK_FILE}" "${DATA_DIR}/${SDK_FILE}" "${SDK[MD5]}"; then
 	echo "Download failed" >&2
 	exit 1
 fi
