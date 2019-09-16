@@ -69,6 +69,8 @@ BOARD_InitPins:
 void BOARD_InitPins(void) {
   CLOCK_EnableClock(kCLOCK_PortA);                           /* Port A Clock Gate Control: Clock enabled */
   CLOCK_EnableClock(kCLOCK_PortB);                           /* Port B Clock Gate Control: Clock enabled */
+  CLOCK_EnableClock(kCLOCK_PortC);                           /* Port C Clock Gate Control: Clock enabled */
+  CLOCK_EnableClock(kCLOCK_PortE);                           /* Port E Clock Gate Control: Clock enabled */
 
   PORT_SetPinMux(PORTA, PIN1_IDX, kPORT_MuxAlt2);            /* PORTA1 (pin 23) is configured as LPUART0_RX */
   PORT_SetPinMux(PORTA, PIN2_IDX, kPORT_MuxAlt2);            /* PORTA2 (pin 24) is configured as LPUART0_TX */
@@ -78,6 +80,18 @@ void BOARD_InitPins(void) {
       | SIM_SOPT5_LPUART0TXSRC(SOPT5_LPUART0TXSRC_LPUART_TX) /* LPUART0 Transmit Data Source Select: LPUART0_TX pin */
       | SIM_SOPT5_LPUART0RXSRC(SOPT5_LPUART0RXSRC_LPUART_RX) /* LPUART0 Receive Data Source Select: LPUART_RX pin */
     );
+
+  /* PORTC3 (pin 46) is configured as CLKOUT */
+  PORT_SetPinMux(BOARD_CLKOUT_PORT, BOARD_CLKOUT_PIN, kPORT_MuxAlt5);
+
+  /* PORTA18 (pin 32) is configured as EXTAL0 */
+  PORT_SetPinMux(BOARD_EXTAL0_PORT, BOARD_EXTAL0_PIN, kPORT_PinDisabledOrAnalog);
+
+  /* PORTA19 (pin 33) is configured as XTAL0 */
+  PORT_SetPinMux(BOARD_XTAL0_PORT, BOARD_XTAL0_PIN, kPORT_PinDisabledOrAnalog);
+
+  /* PORTE0 (pin 1) is configured as CLKOUT32K */
+  PORT_SetPinMux(BOARD_CLKOUT32K_PORT, BOARD_CLKOUT32K_PIN, kPORT_MuxAsGpio);
 }
 
 /*******************************************************************************

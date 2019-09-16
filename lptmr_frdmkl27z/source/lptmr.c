@@ -41,7 +41,7 @@
  ******************************************************************************/
 #define LPTMR_LED_HANDLER LPTMR0_IRQHandler
 /* Get source clock for LPTMR driver */
-#define LPTMR_SOURCE_CLOCK CLOCK_GetFreq(kCLOCK_LpoClk)
+#define LPTMR_SOURCE_CLOCK CLOCK_GetFreq(kCLOCK_Osc0ErClk)
 /* Define LPTMR microseconds counts value */
 #define LPTMR_USEC_COUNT 1000000U
 #define LED_INIT() LED_RED_INIT(LOGIC_LED_ON)
@@ -101,6 +101,8 @@ int main(void)
      */
     LPTMR_GetDefaultConfig(&lptmrConfig);
 
+    lptmrConfig.prescalerClockSource = kLPTMR_PrescalerClock_3; // OSCERCLK
+
     /* Initialize the LPTMR */
     LPTMR_Init(LPTMR0, &lptmrConfig);
 
@@ -108,7 +110,8 @@ int main(void)
      * Set timer period.
      * Note : the parameter "ticks" of LPTMR_SetTimerPeriod should be equal or greater than 1.
     */
-    LPTMR_SetTimerPeriod(LPTMR0, USEC_TO_COUNT(LPTMR_USEC_COUNT, LPTMR_SOURCE_CLOCK));
+    uint32_t ticks = USEC_TO_COUNT(LPTMR_USEC_COUNT, LPTMR_SOURCE_CLOCK);
+    LPTMR_SetTimerPeriod(LPTMR0, ticks);
 
     /* Enable timer interrupt */
     LPTMR_EnableInterrupts(LPTMR0, kLPTMR_TimerInterruptEnable);

@@ -63,6 +63,30 @@ extern "C" {
  */
 void BOARD_InitPins(void);
 
+/*! @name PORTC3 (number 46), J2[15]/CLKOUT
+  @{ */
+#define BOARD_CLKOUT_PORT PORTC /*!<@brief PORT device name: PORTC */
+#define BOARD_CLKOUT_PIN 3U     /*!<@brief PORTC pin index: 3 */
+/* @} */
+
+/*! @name PORTE0 (number 1), J3[1]/CLKOUT32K
+  @{ */
+#define BOARD_CLKOUT32K_PORT PORTE /*!<@brief PORT device name: PORTE */
+#define BOARD_CLKOUT32K_PIN 0U     /*!<@brief PORTE pin index: 0 */
+/* @} */
+
+/*! @name PORTA18 (number 32), EXTAL_32KHZ
+  @{ */
+#define BOARD_EXTAL0_PORT PORTA /*!<@brief PORT device name: PORTA */
+#define BOARD_EXTAL0_PIN 18U    /*!<@brief PORTA pin index: 18 */
+                                /* @} */
+
+/*! @name PORTA19 (number 33), XTAL_32KHZ
+  @{ */
+#define BOARD_XTAL0_PORT PORTA /*!<@brief PORT device name: PORTA */
+#define BOARD_XTAL0_PIN 19U    /*!<@brief PORTA pin index: 19 */
+                               /* @} */
+
 #if defined(__cplusplus)
 }
 #endif

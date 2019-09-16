@@ -58,6 +58,10 @@ board: FRDM-KL27Z
  * Definitions
  ******************************************************************************/
 #define SIM_OSC32KSEL_OSC32KCLK_CLK                       0U  /*!< OSC32KSEL select: OSC32KCLK clock */
+#define SIM_OSC32KSEL_LPO_CLK                             3U  /*!< OSC32KSEL select: LPO clock */
+#define SIM_CLKOUT_SEL_LPO_CLK                            3U  /*!< CLKOUT pin clock select: LPO clock */
+#define SIM_CLKOUT_SEL_OSCERCLK_CLK                       6U  /*!< CLKOUT pin clock select: OSCERCLK clock */
+#define SIM_CLKOUT_ERCLK32K_ENABLE                        1U  /*!< ERCLK32K is output on PTE0 *>
 
 /*******************************************************************************
  * Variables
@@ -119,7 +123,7 @@ const sim_clock_config_t simConfig_BOARD_BootClockRUN =
     };
 const osc_config_t oscConfig_BOARD_BootClockRUN =
     {
-        .freq = 0U,                               /* Oscillator frequency: 0Hz */
+        .freq = 32768U,                           /* Oscillator frequency: 32768Hz */
         .capLoad = (kOSC_Cap4P | kOSC_Cap8P),     /* Oscillator capacity load: 12pF */
         .workMode = kOSC_ModeOscLowPower,         /* Oscillator low power */
         .oscerConfig =
@@ -131,16 +135,34 @@ const osc_config_t oscConfig_BOARD_BootClockRUN =
 /*******************************************************************************
  * Code for BOARD_BootClockRUN configuration
  ******************************************************************************/
+
+/*!
+ * @brief Enable ERCLK32K clock output on PTE0.
+ *
+ * @param enable Boolean enable (1) or disable (0).
+ */
+static inline void CLOCK_EnableEr32kClockOut(uint32_t enable)
+{
+    SIM->SOPT1 = ((SIM->SOPT1 & ~SIM_SOPT1_OSC32KOUT_MASK) | SIM_SOPT1_OSC32KOUT(enable));
+}
+
+
 void BOARD_BootClockRUN(void)
 {
     /* Set the system clock dividers in SIM to safe value. */
     CLOCK_SetSimSafeDivs();
+    /* Initializes OSC0 according to board configuration. */
+    CLOCK_InitOsc0(&oscConfig_BOARD_BootClockRUN);
+    CLOCK_SetXtal0Freq(oscConfig_BOARD_BootClockRUN.freq);
     /* Set MCG to HIRC mode. */
     CLOCK_SetMcgliteConfig(&mcgliteConfig_BOARD_BootClockRUN);
     /* Set the clock configuration in SIM module. */
     CLOCK_SetSimConfig(&simConfig_BOARD_BootClockRUN);
     /* Set SystemCoreClock variable. */
     SystemCoreClock = BOARD_BOOTCLOCKRUN_CORE_CLOCK;
+    /* Set CLKOUT source. */
+    CLOCK_SetClkOutClock(SIM_CLKOUT_SEL_OSCERCLK_CLK);
+    CLOCK_EnableEr32kClockOut(SIM_CLKOUT_ERCLK32K_ENABLE);
 }
 
 /*******************************************************************************
